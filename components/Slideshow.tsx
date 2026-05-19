@@ -16,10 +16,12 @@ export default function Slideshow({ images, interval = 5000 }: SlideshowProps) {
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-  }, [images.length]);
+    console.log(`[DEBUG] Slideshow: passage à la slide ${(currentIndex + 1) % images.length + 1}`);
+  }, [images.length, currentIndex]);
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    console.log(`[DEBUG] Slideshow: retour à la slide ${(currentIndex - 1 + images.length) % images.length + 1}`);
   };
 
   useEffect(() => {
@@ -28,7 +30,7 @@ export default function Slideshow({ images, interval = 5000 }: SlideshowProps) {
   }, [nextSlide, interval]);
 
   return (
-    <div className="relative w-full h-[400px] md:h-[500px] overflow-hidden rounded-2xl border-2 border-black group shadow-2xl">
+    <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] overflow-hidden rounded-2xl border-2 border-black group shadow-2xl">
       {images.map((image, index) => (
         <div
           key={index}

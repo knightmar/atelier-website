@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import Slideshow from "@/components/Slideshow";
@@ -60,16 +62,16 @@ export default function Home() {
               <p>
                 Notre mission est de démocratiser l'accès aux technologies de fabrication moderne : impression 3D, découpe laser, électronique, et bien plus encore. Mais au-delà des machines, c'est avant tout une <span className="text-makerlab font-black italic uppercase">communauté passionnée</span> qui partage ses connaissances chaque jour.
               </p>
-              <div className="pt-4 grid grid-cols-2 gap-4">
-                <div className="border-l-4 border-makerlab pl-4">
+            <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="border-l-4 border-makerlab pl-4" onClick={() => console.log("[DEBUG] Clic sur stat: 24/7")}>
                   <span className="block text-2xl font-black italic">24/7</span>
                   <span className="text-sm uppercase font-bold text-gray-500">Accès membre</span>
                 </div>
-                <div className="border-l-4 border-makerlab pl-4">
+                <div className="border-l-4 border-makerlab pl-4" onClick={() => console.log("[DEBUG] Clic sur stat: +50")}>
                   <span className="block text-2xl font-black italic">+50</span>
                   <span className="text-sm uppercase font-bold text-gray-500">Makers actifs</span>
                 </div>
-              </div>
+            </div>
             </div>
           </div>
           <div className="order-1 lg:order-2">
@@ -86,7 +88,11 @@ export default function Home() {
     
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, index) => (
-            <div key={index} className="group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all hover:shadow-xl hover:-translate-y-1">
+            <div 
+              key={index} 
+              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+              onClick={() => console.log(`[DEBUG] Clic sur le projet : ${project.title}`)}
+            >
               <div className="relative h-48 w-full overflow-hidden">
                 <img 
                   src={project.image} 

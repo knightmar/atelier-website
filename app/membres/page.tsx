@@ -1,3 +1,5 @@
+"use client";
+
 import PageHeader from "@/components/PageHeader";
 
 const members = [
@@ -37,7 +39,11 @@ export default function MembresPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {members.map((member, index) => (
-          <div key={index} className="text-center group">
+          <div 
+            key={index} 
+            className="text-center group cursor-pointer"
+            onClick={() => console.log(`[DEBUG] Clic sur le membre : ${member.name}`)}
+          >
             <div className="relative w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-black group-hover:border-makerlab transition-all shadow-lg rotate-3 group-hover:rotate-0">
               <img 
                 src={member.image} 

@@ -56,6 +56,8 @@ export default function RecrutementPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("[DEBUG] Tentative de soumission du formulaire de recrutement...");
+    
     if (validate()) {
       // Échappement des données (simulation d'envoi)
       const sanitizedData = {
@@ -66,8 +68,22 @@ export default function RecrutementPage() {
         message: escapeHTML(formData.message),
       };
       
-      console.log("Données valides et échappées :", sanitizedData);
-      alert("Candidature envoyée avec succès ! (Simulé)");
+      console.log("[DEBUG] Formulaire valide. Données prêtes pour l'API :", sanitizedData);
+      console.log("[DEBUG] Simulation d'appel API en cours...");
+      
+      alert("Candidature envoyée avec succès ! (Mode simulation activé - vérifiez la console)");
+      
+      // Reset form placeholder
+      setFormData({
+        firstname: "",
+        lastname: "",
+        promotion: "",
+        login: "",
+        skills: [],
+        message: ""
+      });
+    } else {
+      console.warn("[DEBUG] Soumission bloquée : erreurs de validation détectées.", errors);
     }
   };
 
