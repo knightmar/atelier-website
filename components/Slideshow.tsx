@@ -16,12 +16,10 @@ export default function Slideshow({ images, interval = 5000 }: SlideshowProps) {
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    console.log(`[DEBUG] Slideshow: passage à la slide ${(currentIndex + 1) % images.length + 1}`);
-  }, [images.length, currentIndex]);
+  }, [images.length]);
 
   const prevSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-    console.log(`[DEBUG] Slideshow: retour à la slide ${(currentIndex - 1 + images.length) % images.length + 1}`);
   };
 
   useEffect(() => {

@@ -63,11 +63,11 @@ export default function Home() {
                 Notre mission est de démocratiser l'accès aux technologies de fabrication moderne : impression 3D, découpe laser, électronique, et bien plus encore. Mais au-delà des machines, c'est avant tout une <span className="text-makerlab font-black italic uppercase">communauté passionnée</span> qui partage ses connaissances chaque jour.
               </p>
             <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="border-l-4 border-makerlab pl-4" onClick={() => console.log("[DEBUG] Clic sur stat: 24/7")}>
+                <div className="border-l-4 border-makerlab pl-4">
                   <span className="block text-2xl font-black italic">24/7</span>
                   <span className="text-sm uppercase font-bold text-gray-500">Accès membre</span>
                 </div>
-                <div className="border-l-4 border-makerlab pl-4" onClick={() => console.log("[DEBUG] Clic sur stat: +50")}>
+                <div className="border-l-4 border-makerlab pl-4">
                   <span className="block text-2xl font-black italic">+50</span>
                   <span className="text-sm uppercase font-bold text-gray-500">Makers actifs</span>
                 </div>
@@ -90,14 +90,15 @@ export default function Home() {
           {projects.map((project, index) => (
             <div 
               key={index} 
-              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all hover:shadow-xl hover:-translate-y-1 cursor-pointer"
-              onClick={() => console.log(`[DEBUG] Clic sur le projet : ${project.title}`)}
+              className="group overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-all hover:shadow-xl hover:-translate-y-1"
             >
               <div className="relative h-48 w-full overflow-hidden">
-                <img 
+                <Image 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover transition-transform group-hover:scale-110"
                 />
               </div>
               <div className="p-6">

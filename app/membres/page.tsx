@@ -1,7 +1,7 @@
 "use client";
 
 import PageHeader from "@/components/PageHeader";
-
+import Image from "next/image";
 const members = [
   {
     name: "Arthur",
@@ -41,14 +41,14 @@ export default function MembresPage() {
         {members.map((member, index) => (
           <div 
             key={index} 
-            className="text-center group cursor-pointer"
-            onClick={() => console.log(`[DEBUG] Clic sur le membre : ${member.name}`)}
+            className="text-center group"
           >
             <div className="relative w-48 h-48 mx-auto mb-6 rounded-2xl overflow-hidden border-2 border-black group-hover:border-makerlab transition-all shadow-lg rotate-3 group-hover:rotate-0">
-              <img 
+              <Image 
                 src={member.image} 
                 alt={member.name} 
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
               />
             </div>
             <h3 className="text-xl font-black uppercase italic">{member.name}</h3>

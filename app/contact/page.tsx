@@ -2,22 +2,60 @@
 
 import PageHeader from "@/components/PageHeader";
 import { useState } from "react";
+import { ContactFormData } from "@/types/forms";
+import { sendData, escapeHTML } from "@/lib/forms";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState<ContactFormData>({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log("[DEBUG] Tentative d'envoi du formulaire de contact...");
+    setSubmitStatus(null);
     
-    // Simulation d'envoi
-    setTimeout(() => {
-      console.log("[DEBUG] Message envoyé avec succès (simulation).");
-      alert("Votre message a bien été envoyé ! (Mode debug : vérifiez la console)");
-      setIsSubmitting(false);
-      (e.target as HTMLFormElement).reset();
-    }, 1000);
+    // Échappement des données
+    const sanitizedData: ContactFormData = {
+      name: escapeHTML(formData.name),
+      email: escapeHTML(formData.email),
+      subject: escapeHTML(formData.subject),
+      message: escapeHTML(formData.message)
+    };
+
+    const success = await sendData("contact", sanitizedData);
+
+    // Remonter en haut de page pour voir le message
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if (success) {
+      setSubmitStatus({ 
+        type: 'success', 
+        message: "Votre message a bien été envoyé ! Nous vous répondrons dans les plus brefs délais." 
+      });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+      });
+    } else {
+      setSubmitStatus({ 
+        type: 'error', 
+        message: "Une erreur est survenue lors de l'envoi. Veuillez réessayer plus tard." 
+      });
+    }
+    setIsSubmitting(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
@@ -29,6 +67,15 @@ export default function ContactPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         <div className="lg:col-span-2 bg-white dark:bg-gray-900 p-6 sm:p-8 rounded-2xl border border-black dark:border-gray-800 shadow-xl">
+          {submitStatus && (
+            <div className={`mb-6 p-4 rounded-lg border font-bold uppercase italic ${
+              submitStatus.type === 'success' 
+                ? 'bg-makerlab/10 border-makerlab text-black dark:text-makerlab' 
+                : 'bg-red-500/10 border-red-500 text-red-500'
+            }`}>
+              {submitStatus.message}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
@@ -37,7 +84,10 @@ export default function ContactPage() {
                 </label>
                 <input 
                   type="text" 
+                  name="name"
                   required
+                  value={formData.name}
+                  onChange={handleInputChange}
                   placeholder="Votre nom"
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-makerlab focus:outline-none transition-colors dark:bg-gray-800 dark:border-gray-700"
                 />
@@ -48,7 +98,10 @@ export default function ContactPage() {
                 </label>
                 <input 
                   type="email" 
+                  name="email"
                   required
+                  value={formData.email}
+                  onChange={handleInputChange}
                   placeholder="votre@email.com"
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-makerlab focus:outline-none transition-colors dark:bg-gray-800 dark:border-gray-700"
                 />
@@ -61,7 +114,10 @@ export default function ContactPage() {
               </label>
               <input 
                 type="text" 
+                name="subject"
                 required
+                value={formData.subject}
+                onChange={handleInputChange}
                 placeholder="Sujet de votre message"
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-makerlab focus:outline-none transition-colors dark:bg-gray-800 dark:border-gray-700"
               />
@@ -73,7 +129,10 @@ export default function ContactPage() {
               </label>
               <textarea 
                 rows={5}
+                name="message"
                 required
+                value={formData.message}
+                onChange={handleInputChange}
                 placeholder="Dites-nous tout..."
                 className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-makerlab focus:outline-none transition-colors dark:bg-gray-800 dark:border-gray-700 resize-none"
               ></textarea>
