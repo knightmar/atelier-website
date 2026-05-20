@@ -5,9 +5,9 @@ import Image from "next/image";
 const members = [
   {
     name: "Arthur",
-    role: "Expert Fabrication",
+    role: "Expert Software",
     image: "/members/arthur.png",
-    bio: "Arthur maîtrise l'art de transformer le métal et le bois avec une précision chirurgicale."
+    bio: "A coup de GDB il tabasse des bugs. Capable d'écrire du code dégeux a la vitesse de la lumière. #lovesRust"
   },
   {
     name: "Lentin",
@@ -33,7 +33,7 @@ export default function MembresPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <PageHeader 
-        title={<>L'Équipe <span className="text-makerlab">L'atelier</span></>}
+        title={<>L&apos;Équipe <span className="text-makerlab">L&apos;atelier</span></>}
         description="Les visages derrière l'association à Strasbourg qui font vivre le lab au quotidien."
       />
 

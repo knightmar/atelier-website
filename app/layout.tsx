@@ -15,8 +15,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "L'atelier - Association Maker à Strasbourg",
-  description: "Vitrine de l'association L'atelier, makerlab basé à Strasbourg.",
+  title: "L'atelier | Makerlab Strasbourg",
+  description: "Espace de fabrication numérique, communauté et projets maker à Strasbourg.",
+  icons: {
+    icon: "/logo_square.svg",
+    apple: "/logo_square.svg",
+  },
 };
 
 export default function RootLayout({

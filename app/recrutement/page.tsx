@@ -128,7 +128,7 @@ export default function RecrutementPage() {
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <PageHeader
-                title={<>Rejoindre <span className="text-makerlab">L'atelier</span></>}
+                title={<>Rejoindre <span className="text-makerlab">L&apos;atelier</span></>}
                 description="Tu as des projets plein la tête ? Tu veux apprendre ou partager tes compétences à Strasbourg ? Remplis ce formulaire pour nous rejoindre&nbsp;!"
             />
 
@@ -232,7 +232,7 @@ export default function RecrutementPage() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="block text-sm font-black uppercase italic">Centres d'intérêts</label>
+                        <label className="block text-sm font-black uppercase italic">Centres d&apos;intérêts</label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
                             {['Impression 3D', 'Éléctronique', 'Software', 'Textile', 'Bois'].map(interest => (
                                 <label key={interest}
@@ -270,8 +270,8 @@ export default function RecrutementPage() {
                     </button>
 
                     <p className="text-xs text-center text-gray-500 font-medium">
-                        En envoyant ce formulaire, tu acceptes que tes données soient traitées par l'association
-                        L'atelier pour traiter ta demande de recrutement.
+                        En envoyant ce formulaire, tu acceptes que tes données soient traitées par l&apos;association
+                        L&apos;atelier pour traiter ta demande de recrutement.
                     </p>
                 </form>
             </div>

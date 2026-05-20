@@ -36,7 +36,7 @@ export default function Slideshow({ images, interval = 5000 }: SlideshowProps) {
             index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-          <img
+          <Image
             src={image.url}
             alt={image.alt}
             className="w-full h-full object-cover"

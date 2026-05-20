@@ -152,7 +152,7 @@ export default function ContactPage() {
           <div className="bg-makerlab p-6 rounded-2xl border border-black shadow-lg">
             <h3 className="font-black uppercase italic mb-4 text-black">Où nous trouver ?</h3>
             <p className="text-black font-bold">
-              L'atelier Strasbourg<br />
+              L&apos;atelier Strasbourg<br />
               5 Rue Gustave Adolphe Hirn<br />
               67000 Strasbourg, France
             </p>

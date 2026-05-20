@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:pLe makerlab de Strasbourg. Un espace de création, d'innovation et de partage pour tous les passionnés de fabrication.x-6 lg:px-8 py-12">
       <PageHeader 
-        title={<>Bienvenue à <span className="text-makerlab">L'atelier</span></>}
+        title={<>Bienvenue à <span className="text-makerlab">L&apos;atelier</span></>}
         description="Le makerlab d'EPITA Strasbourg. Un espace de création, d'innovation et de partage pour tous les étudiants d'EPITA passionnés de fabrication."
       />
 
@@ -57,15 +57,15 @@ export default function Home() {
             </div>
             <div className="space-y-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
               <p>
-                Situé au cœur de Strasbourg, dans les locaux de l'EPITA <span className="font-bold text-foreground">L'atelier</span> est un espace de création (Makerlab) ouvert à tous. Nous mettons à disposition des outils et du savoir-faire pour transformer vos idées en réalité.
+                Situé au cœur de Strasbourg, dans les locaux de l&apos;EPITA <span className="font-bold text-foreground">L&apos;atelier</span> est un espace de création (Makerlab) ouvert à tous. Nous mettons à disposition des outils et du savoir-faire pour transformer vos idées en réalité.
               </p>
               <p>
-                Notre mission est de proposer l'expression de la créativité dans des domaines technologiques complémentaires à l'enseignement de l'EPITA : impression 3D, broderie, électronique, et bien plus encore. Mais au-delà des machines, c'est avant tout un <span className="text-makerlab font-black italic uppercase">groupe d'étudiants passionnés</span> qui partagent leurs connaissances chaque jour.
+                Notre mission est de proposer l&apos;expression de la créativité dans des domaines technologiques complémentaires à l&apos;enseignement de l&apos;EPITA : impression 3D, broderie, électronique, et bien plus encore. Mais au-delà des machines, c&apos;est avant tout un <span className="text-makerlab font-black italic uppercase">groupe d&apos;étudiants passionnés</span> qui partagent leurs connaissances chaque jour.
               </p>
             <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="border-l-4 border-makerlab pl-4">
                   <span className="block text-2xl font-black italic">+5 ans</span>
-                  <span className="text-sm uppercase font-bold text-gray-500">d'ancienneté de l'asso</span>
+                  <span className="text-sm uppercase font-bold text-gray-500">d&apos;ancienneté de l&apos;asso</span>
                 </div>
                 <div className="border-l-4 border-makerlab pl-4">
                   <span className="block text-2xl font-black italic">+50</span>

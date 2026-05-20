@@ -35,7 +35,6 @@ export default function Navbar() {
             <Link href="/membres" className="hover:bg-black hover:text-makerlab px-3 py-2 rounded-md transition-all">Membres</Link>
             <Link href="/recrutement" className="hover:bg-black hover:text-makerlab px-3 py-2 rounded-md transition-all">Recrutement</Link>
             <Link href="/contact" className="hover:bg-black hover:text-makerlab px-3 py-2 rounded-md transition-all">Contact</Link>
-            <Link href="/admin" className="hover:bg-black hover:text-white px-3 py-2 rounded-md transition-all border border-black/20 bg-black/5">Admin</Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -89,13 +88,6 @@ export default function Navbar() {
             onClick={() => setIsMenuOpen(false)}
           >
             Contact
-          </Link>
-          <Link 
-            href="/admin" 
-            className="block px-3 py-2 rounded-md hover:bg-black hover:text-white transition-all bg-black/5"
-            onClick={() => setIsMenuOpen(false)}
-          >
-            Admin
           </Link>
         </div>
       </div>

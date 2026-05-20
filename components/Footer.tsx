@@ -9,20 +9,20 @@ export default function Footer() {
             <div className="bg-[#f7ae0c] p-2 rounded-lg rotate-3 border border-black/10">
               <Image 
                 src="/logo_square.svg" 
-                alt="L'atelier Logo" 
-                width={48} 
+                alt="L&apos;atelier Logo"
+                width={48}
                 height={48}
                 className="w-12 h-12"
               />
             </div>
             <div>
-              <h3 className="text-2xl font-black italic uppercase text-makerlab">L'atelier</h3>
+              <h3 className="text-2xl font-black italic uppercase text-makerlab">L&apos;atelier</h3>
               <p className="text-gray-400 text-sm">Makerlab associatif à Strasbourg</p>
             </div>
           </div>
           <div className="text-center md:text-right">
             <p className="text-gray-400">
-              © {new Date().getFullYear()} L'atelier. Tous droits réservés.
+              © {new Date().getFullYear()} L&apos;atelier. Tous droits réservés.
             </p>
           </div>
         </div>
