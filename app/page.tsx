@@ -21,31 +21,31 @@ const labImages = [
 
 const projects = [
   {
-    title: "Imprimante 3D Recyclée",
-    description: "Une imprimante 3D construite entièrement à partir de composants électroniques récupérés.",
+    title: "Borne d'arcade",
+    description: "Une borne d'arcade entièrement faite au lab ! ",
     image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=800&q=80",
-    tags: ["Hardware", "Écologie"]
+    tags: ["Hardware", "Gaming", "Bois"]
   },
   {
-    title: "Station Météo Connectée",
-    description: "Système de surveillance environnementale temps réel avec transmission LoRa.",
+    title: "Coffre faible",
+    description: "Tout comme un coffre fort, mais faible",
     image: "https://images.unsplash.com/photo-1558449028-b53a39d100fc?w=800&q=80",
-    tags: ["IoT", "Arduino"]
+    tags: ["Électronique", "Arduino", "Bois"]
   },
   {
-    title: "Borne d'Arcade Retro",
-    description: "Une borne d'arcade faite main avec un Raspberry Pi et du bois de récupération.",
+    title: "Fêtes de la science",
+    description: "Réalisations d'activités éducatives pour la fête de la science",
     image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80",
-    tags: ["Bois", "Retrogaming"]
+    tags: ["Enseignement", "Électronique", "Robotique"]
   }
 ];
 
 export default function Home() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:pLe makerlab de Strasbourg. Un espace de création, d'innovation et de partage pour tous les passionnés de fabrication.x-6 lg:px-8 py-12">
       <PageHeader 
         title={<>Bienvenue à <span className="text-makerlab">L'atelier</span></>}
-        description="Le makerlab de Strasbourg. Un espace de création, d'innovation et de partage pour tous les passionnés de fabrication."
+        description="Le makerlab d'EPITA Strasbourg. Un espace de création, d'innovation et de partage pour tous les étudiants d'EPITA passionnés de fabrication."
       />
 
       <section id="presentation" className="mb-24">
@@ -57,19 +57,19 @@ export default function Home() {
             </div>
             <div className="space-y-6 text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
               <p>
-                Situé au cœur de Strasbourg, <span className="font-bold text-foreground">L'atelier</span> est un espace de fabrication numérique (Makerlab) ouvert à tous. Que vous soyez étudiant, professionnel ou simple curieux, nous mettons à votre disposition les outils et le savoir-faire pour transformer vos idées en réalité.
+                Situé au cœur de Strasbourg, dans les locaux de l'EPITA <span className="font-bold text-foreground">L'atelier</span> est un espace de création (Makerlab) ouvert à tous. Nous mettons à disposition des outils et du savoir-faire pour transformer vos idées en réalité.
               </p>
               <p>
-                Notre mission est de démocratiser l'accès aux technologies de fabrication moderne : impression 3D, découpe laser, électronique, et bien plus encore. Mais au-delà des machines, c'est avant tout une <span className="text-makerlab font-black italic uppercase">communauté passionnée</span> qui partage ses connaissances chaque jour.
+                Notre mission est de proposer l'expression de la créativité dans des domaines technologiques complémentaires à l'enseignement de l'EPITA : impression 3D, broderie, électronique, et bien plus encore. Mais au-delà des machines, c'est avant tout un <span className="text-makerlab font-black italic uppercase">groupe d'étudiants passionnés</span> qui partagent leurs connaissances chaque jour.
               </p>
             <div className="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="border-l-4 border-makerlab pl-4">
-                  <span className="block text-2xl font-black italic">24/7</span>
-                  <span className="text-sm uppercase font-bold text-gray-500">Accès membre</span>
+                  <span className="block text-2xl font-black italic">+5 ans</span>
+                  <span className="text-sm uppercase font-bold text-gray-500">d'ancienneté de l'asso</span>
                 </div>
                 <div className="border-l-4 border-makerlab pl-4">
                   <span className="block text-2xl font-black italic">+50</span>
-                  <span className="text-sm uppercase font-bold text-gray-500">Makers actifs</span>
+                  <span className="text-sm uppercase font-bold text-gray-500">Makers inscrits</span>
                 </div>
             </div>
             </div>
