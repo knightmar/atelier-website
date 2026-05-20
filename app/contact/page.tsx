@@ -28,13 +28,13 @@ export default function ContactPage() {
       message: escapeHTML(formData.message)
     };
 
-    const success = await sendData("contact", sanitizedData);
+    const result = await sendData("contact", sanitizedData);
 
     // Remonter en haut de page pour voir le message
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    if (success) {
-      setSubmitStatus({ 
+    if (result.success) {
+      setSubmitStatus({
         type: 'success', 
         message: "Votre message a bien été envoyé ! Nous vous répondrons dans les plus brefs délais." 
       });
@@ -47,7 +47,7 @@ export default function ContactPage() {
     } else {
       setSubmitStatus({ 
         type: 'error', 
-        message: "Une erreur est survenue lors de l'envoi. Veuillez réessayer plus tard." 
+        message: `${result.message} (réf: ${result.requestId})`
       });
     }
     setIsSubmitting(false);

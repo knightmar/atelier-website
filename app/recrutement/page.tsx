@@ -73,12 +73,12 @@ export default function RecrutementPage() {
                 interests: formData.interests // Pas d'échappement pour les options prédéfinies SeaTable
             };
 
-            const success = await sendData("recrutement", sanitizedData);
+            const result = await sendData("recrutement", sanitizedData);
 
             // Remonter en haut de page pour voir le message
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            if (success) {
+            if (result.success) {
                 setSubmitStatus({
                     type: 'success',
                     message: "Candidature envoyée avec succès ! Nous étudierons ton profil très bientôt."
@@ -96,7 +96,7 @@ export default function RecrutementPage() {
             } else {
                 setSubmitStatus({
                     type: 'error',
-                    message: "Une erreur est survenue lors de l'envoi. Veuillez réessayer plus tard."
+                    message: `${result.message} (réf: ${result.requestId})`
                 });
             }
             setIsSubmitting(false);

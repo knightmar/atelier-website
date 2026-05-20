@@ -1,17 +1,20 @@
 import { FormDataTypes } from "@/types/forms";
-import { submitFormAction } from "@/app/actions/forms";
+import { ActionResult, submitFormAction } from "@/app/actions/forms";
 
 /**
  * Fonction pour envoyer les données du formulaire.
  * Utilise désormais une Server Action pour la sécurité.
  */
-export async function sendData<T extends FormDataTypes>(type: "contact" | "recrutement", data: T): Promise<boolean> {
+export async function sendData<T extends FormDataTypes>(type: "contact" | "recrutement", data: T): Promise<ActionResult> {
     try {
-        const result = await submitFormAction(type, data);
-        return result.success;
+        return await submitFormAction(type, data);
     } catch (error) {
         console.error("Erreur lors de l'envoi des données:", error);
-        return false;
+        return {
+            success: false,
+            message: "Erreur inattendue lors de l'envoi du formulaire.",
+            requestId: "client-runtime"
+        };
     }
 }
 

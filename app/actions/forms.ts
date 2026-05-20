@@ -18,11 +18,16 @@ const ALLOWED_INTERESTS = new Set([
     "Éléctronique"
 ]);
 
-type ActionResult = {
+export type ActionResult = {
     success: boolean;
     message: string;
+    requestId: string;
     retryAfterSeconds?: number;
 };
+
+type AppAccessTokenResult =
+    | { success: true; data: AppAccessTokenResponse }
+    | { success: false; message: string };
 
 type SubmissionValidationResult =
     | {
@@ -241,12 +246,12 @@ interface AppAccessTokenResponse {
 /**
  * Obtient un token d'accès pour l'application SeaTable.
  */
-async function getAppAccessToken(): Promise<AppAccessTokenResponse | null> {
+async function getAppAccessToken(): Promise<AppAccessTokenResult> {
     const apiToken = process.env.API_TOKEN;
 
     if (!apiToken) {
         console.error("[SERVER] API_TOKEN manquant dans les variables d'environnement");
-        return null;
+        return { success: false, message: "Configuration serveur manquante (API_TOKEN)." };
     }
 
     try {
@@ -261,13 +266,13 @@ async function getAppAccessToken(): Promise<AppAccessTokenResponse | null> {
 
         if (!response.ok) {
             console.error(`[SERVER] Erreur lors de l'obtention de l'access token: ${response.status}`);
-            return null;
+            return { success: false, message: `SeaTable a refusé l'authentification (${response.status}).` };
         }
 
-        return await response.json();
+        return { success: true, data: await response.json() };
     } catch (error) {
         console.error("[SERVER] Erreur réseau lors de l'obtention de l'access token:", toErrorMessage(error));
-        return null;
+        return { success: false, message: "Impossible de contacter SeaTable pour obtenir un token." };
     }
 }
 
@@ -276,12 +281,12 @@ async function getAppAccessToken(): Promise<AppAccessTokenResponse | null> {
  */
 export async function getMetadataAction() {
     const appAccess = await getAppAccessToken();
-    
-    if (!appAccess) {
-        return { success: false, message: "Impossible d'obtenir le token d'accès." };
+
+    if (!appAccess.success) {
+        return { success: false, message: appAccess.message };
     }
 
-    const { access_token, dtable_uuid } = appAccess;
+    const { access_token, dtable_uuid } = appAccess.data;
 
     try {
         const response = await fetchWithTimeout(`${SEATABLE_BASE_URL}/api-gateway/api/v2/dtables/${dtable_uuid}/metadata/`, {
@@ -383,6 +388,7 @@ export async function submitFormAction(type: "contact" | "recrutement", data: Fo
         return {
             success: false,
             message: "Trop de tentatives. Veuillez réessayer dans quelques minutes.",
+            requestId,
             retryAfterSeconds: rateLimitResult.retryAfterSeconds
         };
     }
@@ -390,15 +396,16 @@ export async function submitFormAction(type: "contact" | "recrutement", data: Fo
     const validated = validateSubmission(type, data);
     if (!validated.success) {
         console.warn(`[SERVER] [${requestId}] Données invalides pour ${type}`);
-        return { success: false, message: validated.message };
+        return { success: false, message: validated.message, requestId };
     }
 
     const appAccess = await getAppAccessToken();
-    if (!appAccess) {
-        return { success: false, message: "Erreur d'authentification avec SeaTable." };
+    if (!appAccess.success) {
+        console.error(`[SERVER] [${requestId}] ${appAccess.message}`);
+        return { success: false, message: appAccess.message, requestId };
     }
 
-    const { access_token, dtable_uuid } = appAccess;
+    const { access_token, dtable_uuid } = appAccess.data;
 
     try {
         const response = await fetchWithTimeout(`${SEATABLE_BASE_URL}/api-gateway/api/v2/dtables/${dtable_uuid}/rows/`, {
@@ -418,7 +425,11 @@ export async function submitFormAction(type: "contact" | "recrutement", data: Fo
         if (!response.ok) {
             const errorText = await response.text();
             console.error(`[SERVER] [${requestId}] Erreur SeaTable (${response.status}): ${truncateText(errorText, 500)}`);
-            return { success: false, message: `Erreur lors de l'enregistrement dans SeaTable.` };
+            return {
+                success: false,
+                message: `SeaTable a refusé l'enregistrement (${response.status}).`,
+                requestId
+            };
         }
 
         // Notification Discord asynchrone (on n'attend pas la réponse pour retourner le succès au client)
@@ -426,11 +437,12 @@ export async function submitFormAction(type: "contact" | "recrutement", data: Fo
             console.error("[SERVER] Erreur asynchrone notification Discord:", toErrorMessage(error))
         );
 
-        return { success: true, message: "Données transmises avec succès à SeaTable." };
+        return { success: true, message: "Données transmises avec succès à SeaTable.", requestId };
     } catch (error) {
         console.error(`[SERVER] [${requestId}] Erreur lors de l'envoi vers SeaTable: ${toErrorMessage(error)}`);
         return {
             success: false,
+            requestId,
             message: error instanceof Error && error.name === "AbortError"
                 ? "Le service met trop de temps à répondre. Veuillez réessayer."
                 : "Erreur réseau lors de la communication avec SeaTable."

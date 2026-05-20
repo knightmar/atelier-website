@@ -17,9 +17,9 @@ const members = [
   },
   {
     name: "Louis",
-    role: "Designer Industriel",
+    role: "Expert Système D",
     image: "/members/louis.png",
-    bio: "Louis apporte une touche esthétique et fonctionnelle à tous nos projets les plus fous."
+    bio: "On dit qu'il maitrise des langages anciens et cryptiques. Gcode et DST n'ont plus de secrets pour lui. Collectionne les hobbies couteux."
   },
   {
     name: "Thomas",
