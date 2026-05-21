@@ -25,7 +25,7 @@ const members = [
     name: "Thomas",
     role: "Guru Impression 3D",
     image: "/members/thomas.gif",
-    bio: "Thomas ne voit pas de limites, seulement des couches de plastique prêtes à être fusionnées."
+    bio: "Thomas ne voit pas de limites, seulement des couches de plastique prêtes à être fusionnées. Ya bien la place pour un LEGO géant, non ?"
   }
 ];
 
