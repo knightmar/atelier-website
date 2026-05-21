@@ -24,7 +24,7 @@ const members = [
   {
     name: "Thomas",
     role: "Guru Impression 3D",
-    image: "/members/thomas.png",
+    image: "/members/thomas.gif",
     bio: "Thomas ne voit pas de limites, seulement des couches de plastique prêtes à être fusionnées."
   }
 ];
