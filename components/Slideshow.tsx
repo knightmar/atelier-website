@@ -36,11 +36,16 @@ export default function Slideshow({ images, interval = 5000 }: SlideshowProps) {
             index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
           }`}
         >
-          <Image
-            src={image.url}
-            alt={image.alt}
-            className="w-full h-full object-cover"
-          />
+          <div className="relative w-full h-full">
+            <Image
+              src={image.url}
+              alt={image.alt}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
+              className="object-cover"
+              priority={index === currentIndex}
+            />
+          </div>
           {/* Overlay gradient pour le style */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
         </div>

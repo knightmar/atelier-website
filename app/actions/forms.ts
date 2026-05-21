@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { ContactFormData, FormDataTypes, RecrutementFormData } from "@/types/forms";
 
-const SEATABLE_BASE_URL = "https://atelier.benetnath.fr";
+const SEATABLE_BASE_URL = process.env.SEATABLE_BASE_URL?.trim() || "https://atelier.benetnath.fr";
 const AUTH_TIMEOUT_MS = 15000;
 const API_TIMEOUT_MS = 20000;
 const DISCORD_TIMEOUT_MS = 10000;
@@ -267,6 +267,15 @@ async function getAppAccessToken(): Promise<AppAccessTokenResult> {
         if (!response.ok) {
             const details = await response.text();
             console.error(`[SERVER] Erreur lors de l'obtention de l'access token: ${response.status} ${truncateText(details, 500)}`);
+
+            const isCloudflareChallenge = /just a moment|cf-chl|cloudflare/i.test(details);
+            if (isCloudflareChallenge) {
+                return {
+                    success: false,
+                    message: "SeaTable renvoie une page Cloudflare/anti-bot depuis Vercel. Il faut autoriser l'IP/Vercel côté SeaTable ou utiliser l'URL d'origine directe de SeaTable via SEATABLE_BASE_URL."
+                };
+            }
+
             return {
                 success: false,
                 message: `SeaTable a refusé l'authentification (${response.status}). ${details ? `Réponse: ${truncateText(details, 200)}` : ""}`.trim()

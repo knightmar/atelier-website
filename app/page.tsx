@@ -42,8 +42,8 @@ const projects = [
 
 export default function Home() {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:pLe makerlab de Strasbourg. Un espace de création, d'innovation et de partage pour tous les passionnés de fabrication.x-6 lg:px-8 py-12">
-      <PageHeader 
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PageHeader
         title={<>Bienvenue à <span className="text-makerlab">L&apos;atelier</span></>}
         description="Le makerlab d'EPITA Strasbourg. Un espace de création, d'innovation et de partage pour tous les étudiants d'EPITA passionnés de fabrication."
       />

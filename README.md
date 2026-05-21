@@ -40,3 +40,9 @@ Pour configurer les tokens d'API :
 1. Copiez le fichier `.env.example` en `.env`.
 2. Remplissez la variable serveur `API_TOKEN` avec votre clé.
 3. Ne committez jamais le fichier `.env`.
+
+### SeaTable en production
+Si votre instance SeaTable est protégée par Cloudflare ou une protection anti-bot, Vercel peut recevoir une page "Just a moment..." à la place de l'API.
+
+Dans ce cas, définissez aussi `SEATABLE_BASE_URL` avec l'URL d'origine directe de SeaTable (sans challenge Cloudflare) ou autorisez les requêtes provenant de Vercel côté SeaTable/Cloudflare.
+
