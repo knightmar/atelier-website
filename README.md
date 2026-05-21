@@ -38,5 +38,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## Configuration des secrets
 Pour configurer les tokens d'API :
 1. Copiez le fichier `.env.example` en `.env`.
-2. Remplissez la variable `NEXT_PUBLIC_API_TOKEN` avec votre clé.
+2. Remplissez la variable serveur `API_TOKEN` avec votre clé.
 3. Ne committez jamais le fichier `.env`.

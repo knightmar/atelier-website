@@ -247,7 +247,7 @@ interface AppAccessTokenResponse {
  * Obtient un token d'accès pour l'application SeaTable.
  */
 async function getAppAccessToken(): Promise<AppAccessTokenResult> {
-    const apiToken = process.env.API_TOKEN;
+    const apiToken = process.env.API_TOKEN?.trim();
 
     if (!apiToken) {
         console.error("[SERVER] API_TOKEN manquant dans les variables d'environnement");
@@ -265,8 +265,12 @@ async function getAppAccessToken(): Promise<AppAccessTokenResult> {
         }, AUTH_TIMEOUT_MS);
 
         if (!response.ok) {
-            console.error(`[SERVER] Erreur lors de l'obtention de l'access token: ${response.status}`);
-            return { success: false, message: `SeaTable a refusé l'authentification (${response.status}).` };
+            const details = await response.text();
+            console.error(`[SERVER] Erreur lors de l'obtention de l'access token: ${response.status} ${truncateText(details, 500)}`);
+            return {
+                success: false,
+                message: `SeaTable a refusé l'authentification (${response.status}). ${details ? `Réponse: ${truncateText(details, 200)}` : ""}`.trim()
+            };
         }
 
         return { success: true, data: await response.json() };
@@ -314,7 +318,7 @@ export async function getMetadataAction() {
  * Envoie une notification Discord via Webhook.
  */
 async function sendDiscordNotification(type: "contact" | "recrutement", data: ContactFormData | RecrutementFormData) {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
+    const webhookUrl = process.env.DISCORD_WEBHOOK_URL?.trim();
     if (!webhookUrl) {
         console.warn("[SERVER] DISCORD_WEBHOOK_URL manquant, notification non envoyée");
         return;
