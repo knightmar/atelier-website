@@ -326,64 +326,69 @@ export async function getMetadataAction() {
 /**
  * Envoie une notification Discord via Webhook.
  */
-async function sendDiscordNotification(type: "contact" | "recrutement", data: ContactFormData | RecrutementFormData) {
-    const webhookUrl = process.env.DISCORD_WEBHOOK_URL?.trim();
-    if (!webhookUrl) {
-        console.warn("[SERVER] DISCORD_WEBHOOK_URL manquant, notification non envoyée");
-        return;
-    }
+async function sendDiscordNotification(type: "contact" | "recrutement", data: ContactFormData | RecrutementFormData): Promise<boolean> {
+     const webhookUrl = process.env.DISCORD_WEBHOOK_URL?.trim();
+     if (!webhookUrl) {
+         console.warn("[SERVER] DISCORD_WEBHOOK_URL manquant, notification non envoyée");
+         return false;
+     }
 
-    let title = "";
-    let color = 0; // Décimal
-    let fields: Array<{ name: string; value: string; inline?: boolean }> = [];
+     let title = "";
+     let color = 0; // Décimal
+     let fields: Array<{ name: string; value: string; inline?: boolean }> = [];
 
-    if (type === "recrutement") {
-        const payload = data as RecrutementFormData;
-        title = "🚀 Nouvelle candidature déposée !";
-        color = 16430602; // #fab60a en décimal
-        fields = [
-            { name: "Nom", value: truncateText(`${payload.firstname} ${payload.lastname}`, 1024), inline: true },
-            { name: "Promotion", value: truncateText(`${payload.promotion}`, 1024), inline: true },
-            { name: "Login Forge", value: truncateText(`${payload.login}`, 1024), inline: true },
-            { name: "ID Discord", value: truncateText(`${payload.discordId}`, 1024), inline: true },
-            { name: "Centres d'intérêts", value: truncateText(payload.interests.length > 0 ? payload.interests.join(", ") : "Aucun", 1024) },
-            { name: "Message", value: truncateText(payload.message || "Aucun message", 1024) }
-        ];
-    } else {
-        const payload = data as ContactFormData;
-        title = "📩 Nouveau message de contact !";
-        color = 3447003; // Bleu
-        fields = [
-            { name: "Nom", value: truncateText(payload.name, 1024), inline: true },
-            { name: "Email", value: truncateText(payload.email, 1024), inline: true },
-            { name: "Objet", value: truncateText(payload.subject, 1024) },
-            { name: "Message", value: truncateText(payload.message, 1024) }
-        ];
-    }
+     if (type === "recrutement") {
+         const payload = data as RecrutementFormData;
+         title = "🚀 Nouvelle candidature déposée !";
+         color = 16430602; // #fab60a en décimal
+         fields = [
+             { name: "Nom", value: truncateText(`${payload.firstname} ${payload.lastname}`, 1024), inline: true },
+             { name: "Promotion", value: truncateText(`${payload.promotion}`, 1024), inline: true },
+             { name: "Login Forge", value: truncateText(`${payload.login}`, 1024), inline: true },
+             { name: "ID Discord", value: truncateText(`${payload.discordId}`, 1024), inline: true },
+             { name: "Centres d'intérêts", value: truncateText(payload.interests.length > 0 ? payload.interests.join(", ") : "Aucun", 1024) },
+             { name: "Message", value: truncateText(payload.message || "Aucun message", 1024) }
+         ];
+     } else {
+         const payload = data as ContactFormData;
+         title = "📩 Nouveau message de contact !";
+         color = 3447003; // Bleu
+         fields = [
+             { name: "Nom", value: truncateText(payload.name, 1024), inline: true },
+             { name: "Email", value: truncateText(payload.email, 1024), inline: true },
+             { name: "Objet", value: truncateText(payload.subject, 1024) },
+             { name: "Message", value: truncateText(payload.message, 1024) }
+         ];
+     }
 
-    try {
-        const unixTimestamp = Math.floor(Date.now() / 1000);
-        const response = await fetchWithTimeout(webhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                embeds: [{
-                    title,
-                    color,
-                    description: `Reçu le : <t:${unixTimestamp}:f>`,
-                    fields,
-                    footer: { text: "L'atelier - Strasbourg" }
-                }]
-            })
-        }, DISCORD_TIMEOUT_MS);
+     try {
+         const unixTimestamp = Math.floor(Date.now() / 1000);
+         const response = await fetchWithTimeout(webhookUrl, {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({
+                 embeds: [{
+                     title,
+                     color,
+                     description: `Reçu le : <t:${unixTimestamp}:f>`,
+                     fields,
+                     footer: { text: "L'atelier - Strasbourg" }
+                 }]
+             })
+         }, DISCORD_TIMEOUT_MS);
 
-        if (!response.ok) {
-            const details = await response.text();
-            console.error(`[SERVER] Échec webhook Discord (${response.status}): ${truncateText(details, 500)}`);
-        }
-    } catch (error) {
-        console.error("[SERVER] Erreur lors de l'envoi de la notification Discord:", toErrorMessage(error));
-    }
+         if (!response.ok) {
+             const details = await response.text();
+             console.error(`[SERVER] Échec webhook Discord (${response.status}): ${truncateText(details, 500)}`);
+             return false;
+         }
+
+         console.log("[SERVER] Notification Discord envoyée avec succès");
+         return true;
+     } catch (error) {
+         console.error("[SERVER] Erreur lors de l'envoi de la notification Discord:", toErrorMessage(error));
+         return false;
+     }
 }
 
 /**
@@ -445,12 +450,11 @@ export async function submitFormAction(type: "contact" | "recrutement", data: Fo
             };
         }
 
-        // Notification Discord asynchrone (on n'attend pas la réponse pour retourner le succès au client)
-        sendDiscordNotification(type, validated.notificationData).catch((error) =>
-            console.error("[SERVER] Erreur asynchrone notification Discord:", toErrorMessage(error))
-        );
+         // Envoi synchrone de la notification Discord (on attend la réponse avant de retourner au client)
+         // Cela garantit que Vercel n'interrompt pas la fonction avant le webhook Discord
+         await sendDiscordNotification(type, validated.notificationData);
 
-        return { success: true, message: "Données transmises avec succès à SeaTable.", requestId };
+         return { success: true, message: "Données transmises avec succès à SeaTable.", requestId };
     } catch (error) {
         console.error(`[SERVER] [${requestId}] Erreur lors de l'envoi vers SeaTable: ${toErrorMessage(error)}`);
         return {
