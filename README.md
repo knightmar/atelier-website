@@ -39,7 +39,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 Pour configurer les tokens d'API :
 1. Copiez le fichier `.env.example` en `.env`.
 2. Remplissez la variable serveur `API_TOKEN` avec votre clé.
-3. Ne committez jamais le fichier `.env`.
+3. Remplissez la variable serveur `DISCORD_WEBHOOK_URL` avec un webhook vers un salon discord pour obtenir des updates sur les forms.
+4. Ne committez jamais le fichier `.env`.
 
 ### SeaTable en production
 Si votre instance SeaTable est protégée par Cloudflare ou une protection anti-bot, Vercel peut recevoir une page "Just a moment..." à la place de l'API.
