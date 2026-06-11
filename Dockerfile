@@ -1,6 +1,9 @@
 FROM node:20-alpine AS base
 
-# Installation propre de pnpm et configuration
+# 1. Installation des outils système nécessaires pour Alpine (Sharp, node-gyp, etc.)
+RUN apk add --no-cache libc6-compat python3 make g++
+
+# 2. Configuration de pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -8,13 +11,14 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 FROM base AS deps
 WORKDIR /app
 
-# On copie les fichiers de configuration
-COPY package.json pnpm-lock.yaml* ./
+# On copie TOUS les fichiers de configuration pnpm (très important pour les workspaces)
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
-# ÉTAPES DE SÉCURITÉ : 
-# 1. Si l'installation stricte échoue, on autorise pnpm à mettre à jour le lockfile pour Docker
-# 2. On désactive les scripts de post-installation qui font souvent planter Alpine Linux
-RUN pnpm i --frozen-lockfile || pnpm i --no-frozen-lockfile
+# Si tu as d'autres packages internes définis dans ton workspace, décommente la ligne suivante :
+# COPY packages/ ./packages/
+
+# Installation sans exécuter les scripts de post-install qui font souvent planter Docker
+RUN pnpm i --no-frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 WORKDIR /app
