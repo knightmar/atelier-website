@@ -1,9 +1,6 @@
 FROM node:20-alpine AS base
 
-# 1. Installation des outils système nécessaires pour Alpine (Sharp, node-gyp, etc.)
-RUN apk add --no-cache libc6-compat python3 make g++
-
-# 2. Configuration de pnpm
+# Configuration de pnpm
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate
@@ -11,14 +8,15 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 FROM base AS deps
 WORKDIR /app
 
-# On copie TOUS les fichiers de configuration pnpm (très important pour les workspaces)
+# On ne copie QUE ce qui est nécessaire pour installer les modules
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
-# Si tu as d'autres packages internes définis dans ton workspace, décommente la ligne suivante :
-# COPY packages/ ./packages/
-
-# Installation sans exécuter les scripts de post-install qui font souvent planter Docker
-RUN pnpm i --no-frozen-lockfile --ignore-scripts
+# CONFIGURATION CRITIQUE POUR NEXT 16 / REACT 19 :
+# --no-frozen-lockfile : Permet à Docker de s'adapter si ton lockfile local a un micro-écart
+# --ignore-scripts     : Évite les crashs des scripts tiers sur Alpine Linux
+# config set auto-install-peers true : Force pnpm à installer automatiquement les dépendances paires manquantes
+RUN pnpm config set auto-install-peers true && \
+    pnpm i --no-frozen-lockfile --ignore-scripts
 
 FROM base AS builder
 WORKDIR /app
