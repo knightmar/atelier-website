@@ -1,29 +1,23 @@
 FROM node:20-alpine AS base
 
-# Configuration de pnpm
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Installation des outils système de base au cas où
+RUN apk add --no-cache libc6-compat
 
 FROM base AS deps
 WORKDIR /app
 
-# On ne copie QUE ce qui est nécessaire pour installer les modules
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+# On ne copie que le package.json (on ignore volontairement les lockfiles pnpm)
+COPY package.json ./
 
-# CONFIGURATION CRITIQUE POUR NEXT 16 / REACT 19 :
-# --no-frozen-lockfile : Permet à Docker de s'adapter si ton lockfile local a un micro-écart
-# --ignore-scripts     : Évite les crashs des scripts tiers sur Alpine Linux
-# config set auto-install-peers true : Force pnpm à installer automatiquement les dépendances paires manquantes
-RUN pnpm config set auto-install-peers true && \
-    pnpm i --no-frozen-lockfile --ignore-scripts
+# On utilise npm avec l'option legacy-peer-deps pour Next 16 et React 19
+RUN npm install --legacy-peer-deps
 
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN pnpm run build
+RUN npm run build
 
 FROM base AS runner
 WORKDIR /app
