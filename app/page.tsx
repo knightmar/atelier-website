@@ -102,7 +102,7 @@ export default function Home() {
                 />
               </div>
               <div className="p-6">
-                <div className="flex gap-2 mb-3">
+                <div className="flex flex-wrap gap-2 mb-3">
                   {project.tags.map(tag => (
                     <span key={tag} className="px-2 py-1 text-xs font-bold bg-black text-makerlab rounded-md uppercase tracking-wider">
                       {tag}
